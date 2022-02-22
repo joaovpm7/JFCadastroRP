@@ -5,12 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import modelo.Pessoa;
 import util.BancoDados;
 
 public class ControlePessoa {
 
-    
     public static boolean Cadastrar(Pessoa p) {
         try {
             Connection conn = BancoDados.getConexao(); //conectar com o bando de dados e enviar os dados salvos da classe Contato.
@@ -53,5 +54,107 @@ public class ControlePessoa {
             return false;
         }
     }
-    
+
+    public static List<Pessoa> ListarPaciente() {
+        try {
+
+            Connection conn = BancoDados.getConexao();
+            String sql = "SELECT * FROM tb_pessoa; ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            List<Pessoa> lista = new ArrayList();
+            final ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+
+                Pessoa p = new Pessoa();
+                p.setId(rs.getInt("id"));
+                p.setNomeCompleto(rs.getString("nome_completo"));
+                p.setCpf(rs.getString("cpf"));
+                p.setDataNascimento(rs.getDate("data_nascimento"));
+                p.setEscolariodade("escolaridade");
+                p.setSexo(rs.getString("sexo"));
+                p.setEmail(rs.getString("email"));
+                p.setTelefone(rs.getString("telefone"));
+                p.setCep(rs.getString("cep"));
+                p.setLogradouro(rs.getString("logradouro"));
+                p.setNumero(rs.getString("numero"));
+                p.setBairro(rs.getString("bairro"));
+                p.setCidade(rs.getString("cidade"));
+                p.setUf(rs.getString("uf"));
+                p.setDataCadastro(rs.getTimestamp("data_cadastro"));
+                lista.add(p);
+            }
+            return lista;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static boolean Excluir(long id) {
+        try {
+            Connection conn = BancoDados.getConexao();
+            String sql = "DELETE FROM tb_pessoa  WHERE id = ?; ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setLong(1, id);
+            int linhasafetadas = ps.executeUpdate();
+            if (linhasafetadas > 0) {
+                System.out.println("Apagou!!");
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean Atualizar(Pessoa cat) {
+        try {
+            Connection conn = BancoDados.getConexao(); //conectar com o bando de dados e enviar os dados salvos da classe Contato.
+            String sql = "UPDATE tb_pessoa ";
+            sql += " SET nome_completo = ?, ";
+            sql += " cpf = ?, ";
+            sql += " data_nascimento = ?, ";
+            sql += " escolaridade = ?, ";
+            sql += " sexo = ?, ";
+            sql += " email = ?, ";
+            sql += " telefone = ? ";
+            sql += " cep = ?, ";
+            sql += " logradouro = ?, ";
+            sql += " numero = ?, ";
+            sql += " bairro = ?, ";
+            sql += " cidade = ?, ";
+            sql += " uf = ?, ";
+            sql += " data_cadastro = ?, ";
+            sql += " WHERE id = ?; ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, cat.getNomeCompleto());
+            ps.setString(2, cat.getCpf());
+            ps.setDate(3, cat.getDataNascimento());
+            ps.setString(4, cat.getEscolariodade());
+            ps.setString(5, cat.getSexo());
+            ps.setString(6, cat.getEmail());
+            ps.setString(7, cat.getTelefone());
+            ps.setString(8, cat.getCep());
+            ps.setString(9, cat.getLogradouro());
+            ps.setString(10, cat.getNumero());
+            ps.setString(11, cat.getCidade());
+            ps.setString(12, cat.getUf());
+            ps.setString(13, String.valueOf(cat.getDataCadastro()));
+            ps.setLong(14, cat.getId());
+            int linhasafetadas = ps.executeUpdate();
+            if (linhasafetadas > 0) {
+                System.out.println("atualizou!");
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

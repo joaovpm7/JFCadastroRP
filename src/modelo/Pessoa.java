@@ -1,6 +1,7 @@
 package modelo;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Pessoa {
 
@@ -18,6 +19,9 @@ public class Pessoa {
     private String bairro;
     private String cidade;
     private String uf;
+    private Timestamp dataCadastro;
+    
+    
 
     public long getId() {
         return id;
@@ -129,6 +133,14 @@ public class Pessoa {
 
     public void setUf(String uf) {
         this.uf = uf;
+    }
+
+    public Timestamp getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(Timestamp dataCadastro) {
+        this.dataCadastro = dataCadastro;
     }
 
     

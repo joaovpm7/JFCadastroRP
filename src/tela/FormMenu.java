@@ -306,6 +306,7 @@ public class FormMenu extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnCadastrar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnCadastrar.setText("Cadastrar");
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -459,6 +460,8 @@ public class FormMenu extends javax.swing.JFrame {
                 cbxEscolaridade.setSelectedIndex(0);
                 cbxUF.setSelectedIndex(0);
                 JOptionPane.showMessageDialog(this, "Cadastro Efetuado com sucesso!", "OK", JOptionPane.INFORMATION_MESSAGE);
+                FormListarCliente formlistar = new FormListarCliente();
+                formlistar.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Erro na inserção do registro", "Erro", JOptionPane.ERROR_MESSAGE);
             }
