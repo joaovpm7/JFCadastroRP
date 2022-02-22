@@ -7,6 +7,8 @@ package tela;
 
 import controle.ControlePessoa;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import modelo.Pessoa;
 
@@ -80,6 +82,9 @@ public class FormMenu extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         cbxUF = new javax.swing.JComboBox<>();
         btnCadastrar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        txtBuscar = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -314,6 +319,21 @@ public class FormMenu extends javax.swing.JFrame {
             }
         });
 
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setText("Pesquisar:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -329,11 +349,24 @@ public class FormMenu extends javax.swing.JFrame {
                         .addGap(258, 258, 258)
                         .addComponent(btnCadastrar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnBuscar)
+                .addGap(209, 209, 209))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBuscar)
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -413,7 +446,7 @@ public class FormMenu extends javax.swing.JFrame {
         String strdataformat = vetdata[2] + "-" + vetdata[1] + "-" + vetdata[0]; //yyyy-MM-dd
         p.setDataNascimento(Date.valueOf(strdataformat));
         //escolaridade
-        p.setEscolariodade(String.valueOf(cbxEscolaridade.getSelectedItem()));
+        p.setEscolaridade(String.valueOf(cbxEscolaridade.getSelectedItem()));
          
          
          //sexo
@@ -465,13 +498,57 @@ public class FormMenu extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Erro na inserção do registro", "Erro", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            p.setId(Long.parseLong(txtBuscar.getText()));
+            boolean alterou = ControlePessoa.Atualizar(p);
+            if (alterou) {
+                JOptionPane.showMessageDialog(this, "Atualização Efetuada com sucesso!", "OK", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Edição não Efetuada!", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
         
         
         
         
         
+        
     }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        btnCadastrar.setText("Alterar");
+        long id = Long.parseLong(txtBuscar.getText());
+        Pessoa pa = ControlePessoa.BuscarPorID(id);
+        if (pa.getId() > 0) {
+            String formato = "dd/MM/yyyy";
+            DateFormat dateFormat = new SimpleDateFormat(formato);
+            txtNomeCompleto.setText(pa.getNomeCompleto());
+            txtCPF.setText(pa.getCpf());
+            txtDataNascimento.setText(dateFormat.format(pa.getDataNascimento()));
+            cbxEscolaridade.setSelectedItem(pa.getEscolaridade());
+            //sexo
+            String sexo = pa.getSexo();
+            if (sexo.equals("M")) {
+                rbtnMasculino.setSelected(true);
+                rbtnFeminino.setSelected(false);
+            } else {
+                rbtnFeminino.setSelected(true);
+                rbtnFeminino.setSelected(false);
+            }
+            txtEmail.setText(pa.getEmail());
+            txtTelefone.setText(pa.getTelefone());
+            txtCep.setText(pa.getCep());
+            txtLogradouro.setText(pa.getLogradouro());
+            txtNumero.setText(pa.getNumero());
+            txtBairro.setText(pa.getBairro());
+            txtCidade.setText(pa.getCidade());
+            cbxUF.setSelectedItem(pa.getUf());
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -509,6 +586,7 @@ public class FormMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCadastrar;
     private javax.swing.ButtonGroup btngSexo;
     private javax.swing.JComboBox<String> cbxEscolaridade;
@@ -517,6 +595,7 @@ public class FormMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -531,6 +610,7 @@ public class FormMenu extends javax.swing.JFrame {
     private javax.swing.JRadioButton rbtnFeminino;
     private javax.swing.JRadioButton rbtnMasculino;
     private javax.swing.JTextField txtBairro;
+    private javax.swing.JTextField txtBuscar;
     private javax.swing.JFormattedTextField txtCPF;
     private javax.swing.JTextField txtCep;
     private javax.swing.JTextField txtCidade;

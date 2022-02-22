@@ -11,6 +11,39 @@ import modelo.Pessoa;
 import util.BancoDados;
 
 public class ControlePessoa {
+    
+    public static Pessoa BuscarPorID(long idPessoa) {
+        try {
+            Connection conn = BancoDados.getConexao();
+            String sql = "SELECT * FROM tb_pessoa WHERE id = ?; ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setLong(1, idPessoa);
+            final ResultSet rs = ps.executeQuery();
+
+            Pessoa p = new Pessoa();
+            if (rs.next()) {
+                p.setId(rs.getInt("id"));
+                p.setNomeCompleto(rs.getString("nome_completo"));
+                p.setCpf(rs.getString("cpf"));
+                p.setDataNascimento(rs.getDate("data_nascimento"));
+                p.setEscolaridade(rs.getString("escolaridade"));
+                p.setSexo(rs.getString("sexo"));
+                p.setEmail(rs.getString("email"));
+                p.setTelefone(rs.getString("telefone"));
+                p.setCep(rs.getString("cep"));
+                p.setLogradouro(rs.getString("logradouro"));
+                p.setNumero(rs.getString("numero"));
+                p.setBairro(rs.getString("bairro"));
+                p.setCidade(rs.getString("cidade"));
+                p.setUf(rs.getString("uf"));
+            }
+            return p;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 
     public static boolean Cadastrar(Pessoa p) {
         try {
@@ -23,7 +56,7 @@ public class ControlePessoa {
             ps.setString(1, p.getNomeCompleto());
             ps.setString(2, p.getCpf());
             ps.setDate(3, p.getDataNascimento());
-            ps.setString(4, p.getEscolariodade());
+            ps.setString(4, p.getEscolaridade());
             ps.setString(5, p.getSexo());
             ps.setString(6, p.getEmail());
             ps.setString(7, p.getTelefone());
@@ -70,7 +103,7 @@ public class ControlePessoa {
                 p.setNomeCompleto(rs.getString("nome_completo"));
                 p.setCpf(rs.getString("cpf"));
                 p.setDataNascimento(rs.getDate("data_nascimento"));
-                p.setEscolariodade("escolaridade");
+                p.setEscolaridade("escolaridade");
                 p.setSexo(rs.getString("sexo"));
                 p.setEmail(rs.getString("email"));
                 p.setTelefone(rs.getString("telefone"));
@@ -120,29 +153,28 @@ public class ControlePessoa {
             sql += " escolaridade = ?, ";
             sql += " sexo = ?, ";
             sql += " email = ?, ";
-            sql += " telefone = ? ";
+            sql += " telefone = ?, ";
             sql += " cep = ?, ";
             sql += " logradouro = ?, ";
             sql += " numero = ?, ";
             sql += " bairro = ?, ";
             sql += " cidade = ?, ";
-            sql += " uf = ?, ";
-            sql += " data_cadastro = ?, ";
+            sql += " uf = ? ";
             sql += " WHERE id = ?; ";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, cat.getNomeCompleto());
             ps.setString(2, cat.getCpf());
             ps.setDate(3, cat.getDataNascimento());
-            ps.setString(4, cat.getEscolariodade());
+            ps.setString(4, cat.getEscolaridade());
             ps.setString(5, cat.getSexo());
             ps.setString(6, cat.getEmail());
             ps.setString(7, cat.getTelefone());
             ps.setString(8, cat.getCep());
             ps.setString(9, cat.getLogradouro());
             ps.setString(10, cat.getNumero());
-            ps.setString(11, cat.getCidade());
-            ps.setString(12, cat.getUf());
-            ps.setString(13, String.valueOf(cat.getDataCadastro()));
+            ps.setString(11, cat.getBairro());
+            ps.setString(12, cat.getCidade());
+            ps.setString(13, cat.getUf());
             ps.setLong(14, cat.getId());
             int linhasafetadas = ps.executeUpdate();
             if (linhasafetadas > 0) {

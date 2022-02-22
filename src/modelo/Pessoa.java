@@ -9,7 +9,7 @@ public class Pessoa {
     private String nomeCompleto;
     private String cpf;
     private Date dataNascimento;
-    private String escolariodade;
+    private String escolaridade;
     private String sexo;
     private String email;
     private String telefone;
@@ -55,12 +55,12 @@ public class Pessoa {
         this.dataNascimento = dataNascimento;
     }
 
-    public String getEscolariodade() {
-        return escolariodade;
+    public String getEscolaridade() {
+        return escolaridade;
     }
 
-    public void setEscolariodade(String escolariodade) {
-        this.escolariodade = escolariodade;
+    public void setEscolaridade(String escolaridade) {
+        this.escolaridade = escolaridade;
     }
 
     public String getSexo() {
